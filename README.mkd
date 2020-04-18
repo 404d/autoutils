@@ -1,0 +1,24 @@
+# Binary Ninja Auto Utils
+Auto Utils provides various helpers for automatically discovering features about a binary.
+
+Some examples:
+
+* Renaming of methods based on logging with method names
+* That's it right now, sorry
+
+## Examples
+
+### Automatic symbol name discovery based on call args
+In cases where you for example have a common logging function that will log the
+caller's name using an argument passed to it, the plugin will be able to rename
+the names of all callers based on the strings left in the binary.
+
+Given an example binary with methods as shown below:
+
+![Subroutines without clear or meaningful names](extras/discover_arg_before.png)
+
+By running the "Analysis → Discover caller names by call parameters" action
+while being inside the `log_msg` subroutine and providing it with the parameter
+name `arg1`, the plugin will change the name of all callers to `log_msg` as such:
+
+![Subroutines after call-argument name discovery](extras/discover_arg_after.png)
