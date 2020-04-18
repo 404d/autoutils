@@ -1,6 +1,7 @@
 from binaryninja import log_info, log_debug, log_error, log_warn
 from binaryninja.enums import MediumLevelILOperation
 from binaryninja.plugin import PluginCommand
+from binaryninja.types import Symbol
 
 
 def discover_names(func, func_params):
@@ -59,14 +60,14 @@ def discover_names(func, func_params):
 
 
 def do_discover_caller_names(bv, func):
-    func_params = [param for param in current_function.parameter_vars if param.name == "method"]
+    func_params = [param for param in func.parameter_vars if param.name == "method"]
     force = False
 
     if len(func_params) != 1:
         log_error("Unable to determine method name argument")
         return
 
-    for name, func in check(func, func_params).items():
+    for name, func in discover_names(func, func_params).items():
         # Skip if named correctly
         if func.symbol.name == name:
             continue
@@ -79,7 +80,7 @@ def do_discover_caller_names(bv, func):
         log_info("Renaming %r to %r" % (func, name))
         func.view.define_auto_symbol(Symbol(func.symbol.type, func.symbol.address, short_name=name))
 
-PluginCommand.register(
+PluginCommand.register_for_function(
     "Analysis\\Discover caller names by call parameters",
     "Renames all unique callers based on call parameters to the current function",
     do_discover_caller_names,
