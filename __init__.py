@@ -1,4 +1,5 @@
 from binaryninja import log_info, log_debug, log_error, log_warn
+import binaryninja.interaction as interaction
 from binaryninja.enums import MediumLevelILOperation
 from binaryninja.plugin import PluginCommand
 from binaryninja.types import Symbol
@@ -60,7 +61,11 @@ def discover_names(func, func_params):
 
 
 def do_discover_caller_names(bv, func):
-    func_params = [param for param in func.parameter_vars if param.name == "method"]
+    param_name = interaction.get_text_line_input("Please enter the name of the parameter that contains the method name", "Parameter name")
+    # Docs says the above function returns a string with a link to the Python 3
+    # docs (e.g. a Py3 str), but it actually returns a bytes-object under Py3
+    param_name = param_name.decode("utf-8")
+    func_params = [param for param in func.parameter_vars if param.name == param_name]
     force = False
 
     if len(func_params) != 1:
