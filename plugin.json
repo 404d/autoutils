@@ -16,7 +16,7 @@
 		"Windows" : "Install the plugin using the plugin manager or clone the repository to your plugins folder."
 	},
 	"dependencies": {},
-	"version": "0.2",
+	"version": "0.3",
 	"author": "404'd",
 	"minimumbinaryninjaversion": 2096
 }
